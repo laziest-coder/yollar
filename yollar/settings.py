@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'profiles',
+    'reports',
     'rest_framework.authtoken'
 ]
 
