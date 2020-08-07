@@ -48,7 +48,7 @@ class UserProfile(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return str(self.device_id)
+        return str(self.id)
 
     def has_perm(self, perm, obj=None):
         return True

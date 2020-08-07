@@ -23,7 +23,7 @@ class Report(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     comment = models.TextField(blank=True)
     type = models.CharField(max_length=50, choices=TYPE_CHOICES, default=OTHER)
-    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='users', on_delete=models.SET_NULL)
     votes = models.IntegerField(default=0)
 
     class Meta:
