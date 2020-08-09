@@ -1,22 +1,23 @@
 from django.db import models
 from django.conf import settings
 
-TRAFFIC_LIGHT = "traffic_light"
-SIDEWALK = "sidewalk"
-ROAD = "road"
-SIGN = "sign"
-OTHER = "other"
-
-TYPE_CHOICES = (
-    (TRAFFIC_LIGHT, "Traffic Light"),
-    (SIDEWALK, "Sidewalk"),
-    (ROAD, "Road"),
-    (SIGN, "Sign"),
-    (OTHER, "Other")
-)
-
 
 class Report(models.Model):
+
+    TRAFFIC_LIGHT = "traffic_light"
+    SIDEWALK = "sidewalk"
+    ROAD = "road"
+    SIGN = "sign"
+    OTHER = "other"
+
+    TYPE_CHOICES = (
+        (TRAFFIC_LIGHT, "Traffic Light"),
+        (SIDEWALK, "Sidewalk"),
+        (ROAD, "Road"),
+        (SIGN, "Sign"),
+        (OTHER, "Other")
+    )
+
     address_uz = models.CharField(max_length=255)
     address_ru = models.CharField(max_length=255)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
