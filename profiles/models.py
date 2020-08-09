@@ -37,7 +37,7 @@ class UserProfileManager(BaseUserManager):
 
 
 class UserProfile(AbstractBaseUser):
-    device_id = models.CharField(max_length=16)
+    device_id = models.CharField(max_length=16, unique=True)
     username = models.CharField(blank=True, unique=True, max_length=255)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -62,4 +62,4 @@ class UserProfile(AbstractBaseUser):
 
     class Meta:
         db_table = 'profiles'
-        unique_together = ('device_id', 'username')
+

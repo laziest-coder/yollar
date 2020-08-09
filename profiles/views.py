@@ -6,6 +6,7 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from .serializers import UserProfileSerializer
+from .models import UserProfileManager
 
 UserModel = get_user_model()
 
@@ -14,15 +15,17 @@ class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
         try:
-            user, created = UserModel.objects.get_or_create(
-                device_id=request.data['device_id']
+            user = UserModel.objects.get(
+                device_id=request.data['device_id'],
             )
-            user.save()
-
+            return Response({'error': 'User already exists!'}, status=status.HTTP_400_BAD_REQUEST)
+        except UserModel.DoesNotExist:
+            user = UserModel.objects.create(
+                device_id=request.data['device_id'],
+                username=UserProfileManager.generate_random_device_id()
+            )
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key})
-        except:
-            return Response({"error": "Whoops! Looks like something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileApiView(APIView):
