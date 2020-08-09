@@ -24,7 +24,6 @@ class Report(models.Model):
     comment = models.TextField(blank=True)
     type = models.CharField(max_length=50, choices=TYPE_CHOICES, default=OTHER)
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='users', on_delete=models.SET_NULL)
-    votes = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'reports'

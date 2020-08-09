@@ -13,7 +13,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ('id', 'latitude', 'longitude', 'comment', 'type', 'votes')
+        fields = ('id', 'latitude', 'longitude', 'comment', 'type')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
