@@ -29,7 +29,8 @@ INSTALLED_APPS = [
 
     'profiles',
     'reports',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
