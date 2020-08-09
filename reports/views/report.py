@@ -12,7 +12,11 @@ class ReportList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        reports = Report.objects.all()
+        reports = Report.objects.all().order_by('votes')
+        # shit
+        for report in reports:
+            report.current_user = request.user
+        ########
         serializer = ReportSerializer(reports, many=True)
         return Response(serializer.data)
 
@@ -33,6 +37,7 @@ class ReportDetail(APIView):
     def get(self, request, pk):
         try:
             report = Report.objects.get(pk=pk)
+            report.current_user = request.user
             serializer = ReportSerializer(report)
             return Response(serializer.data)
         except Report.DoesNotExist:
@@ -41,6 +46,7 @@ class ReportDetail(APIView):
     def put(self, request, pk):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
+            report.current_user = request.user
             serializer = ReportSerializer(report, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -65,6 +71,7 @@ class ReportImage(APIView):
     def put(self, request, pk):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
+            report.current_user = request.user
             images = request.FILES
             Image.objects.filter(report=report).delete()
             for image in images.getlist('images'):
