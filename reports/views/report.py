@@ -12,22 +12,15 @@ class ReportList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        reports = Report.objects.all().order_by('votes')
-        # shit
-        for report in reports:
-            report.current_user = request.user
-        ########
-        serializer = ReportSerializer(reports, many=True)
+        reports = Report.objects.all()
+        serializer = ReportSerializer(reports, many=True, context={'user': request.user})
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ReportSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(reporter=request.user,
-                            address_uz=request.data['address_uz'],
-                            address_ru=request.data['address_ru'])
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ReportSerializer(data=request.data, context={'user': request.user})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(reporter=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ReportDetail(APIView):
@@ -38,7 +31,7 @@ class ReportDetail(APIView):
         try:
             report = Report.objects.get(pk=pk)
             report.current_user = request.user
-            serializer = ReportSerializer(report)
+            serializer = ReportSerializer(report, context={'user': request.user})
             return Response(serializer.data)
         except Report.DoesNotExist:
             raise Http404
@@ -47,11 +40,10 @@ class ReportDetail(APIView):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
             report.current_user = request.user
-            serializer = ReportSerializer(report, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = ReportSerializer(report, data=request.data, context={'user': request.user})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
         except Report.DoesNotExist:
             raise Http404
 
@@ -76,7 +68,7 @@ class ReportImage(APIView):
             Image.objects.filter(report=report).delete()
             for image in images.getlist('images'):
                 Image.objects.create(report=report, src=image)
-            serializer = ReportSerializer(report)
+            serializer = ReportSerializer(report, context={'user': request.user})
             return Response(serializer.data)
         except Report.DoesNotExist:
             raise Http404
