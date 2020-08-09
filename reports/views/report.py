@@ -56,3 +56,20 @@ class ReportDetail(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Report.DoesNotExist:
             raise Http404
+
+
+class ReportImage(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, pk):
+        try:
+            report = Report.objects.get(pk=pk, reporter_id=request.user)
+            images = request.FILES
+            Image.objects.filter(report=report).delete()
+            for image in images.getlist('images'):
+                Image.objects.create(report=report, src=image)
+            serializer = ReportSerializer(report)
+            return Response(serializer.data)
+        except Report.DoesNotExist:
+            raise Http404
