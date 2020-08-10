@@ -35,6 +35,6 @@ class ReportSerializer(serializers.ModelSerializer):
         return report.votes.count()
 
     def get_is_upvoted(self, report):
-        return report.votes.filter(reporter_id=self.context['user']).exists()
+        return report.votes.filter(user_id=self.context['user']).exists()
 
 
