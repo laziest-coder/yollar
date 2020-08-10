@@ -30,7 +30,6 @@ class ReportDetail(APIView):
     def get(self, request, pk):
         try:
             report = Report.objects.get(pk=pk)
-            report.current_user = request.user
             serializer = ReportSerializer(report, context={'user': request.user})
             return Response(serializer.data)
         except Report.DoesNotExist:
@@ -39,7 +38,6 @@ class ReportDetail(APIView):
     def put(self, request, pk):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
-            report.current_user = request.user
             serializer = ReportSerializer(report, data=request.data, context={'user': request.user})
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -63,7 +61,6 @@ class ReportImage(APIView):
     def put(self, request, pk):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
-            report.current_user = request.user
             images = request.FILES
             Image.objects.filter(report=report).delete()
             for image in images.getlist('images'):
