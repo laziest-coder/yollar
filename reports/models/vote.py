@@ -8,3 +8,4 @@ class Vote(models.Model):
 
     class Meta:
         db_table = 'report_votes'
+        unique_together = ['report', 'user']
