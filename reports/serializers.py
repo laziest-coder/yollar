@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_extra_fields.geo_fields import PointField
 from reports.models import Report, Image
 from profiles.serializers import UserProfileSerializer
 
@@ -14,6 +15,7 @@ class ReportSerializer(serializers.ModelSerializer):
     reporter = UserProfileSerializer(read_only=True)
     votes = serializers.SerializerMethodField()
     is_upvoted = serializers.SerializerMethodField()
+    location = PointField(required=False)
 
     class Meta:
         model = Report
@@ -21,14 +23,13 @@ class ReportSerializer(serializers.ModelSerializer):
             'id',
             'address_uz',
             'address_ru',
-            'latitude',
-            'longitude',
+            'location',
             'type',
             'comment',
             'reporter',
             'images',
             'votes',
-            'is_upvoted'
+            'is_upvoted',
         )
 
     def get_votes(self, report):
@@ -36,5 +37,3 @@ class ReportSerializer(serializers.ModelSerializer):
 
     def get_is_upvoted(self, report):
         return report.votes.filter(user_id=self.context['user']).exists()
-
-
