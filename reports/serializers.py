@@ -10,7 +10,7 @@ class ReportImageSerializer(serializers.ModelSerializer):
 
 
 class ReportSerializer(serializers.ModelSerializer):
-    images = ReportImageSerializer(many=True, read_only=True)
+    images = serializers.StringRelatedField(many=True, read_only=True)
     reporter = UserProfileSerializer(read_only=True)
     votes = serializers.SerializerMethodField()
     is_upvoted = serializers.SerializerMethodField()
