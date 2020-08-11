@@ -18,10 +18,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     # 'django.contrib.staticfiles',
 
+    # Project apps
     'profiles',
     'reports',
+
+    # Third party packages
     'rest_framework.authtoken',
     'django_cleanup',
+    'django.contrib.gis',
 ]
 
 AUTH_USER_MODEL = "profiles.UserProfile"
@@ -58,7 +62,7 @@ WSGI_APPLICATION = 'yollar.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'yollar',
         'USER': 'yollar',
         'PASSWORD': 'yollar',
