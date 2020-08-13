@@ -13,11 +13,11 @@ class ReportList(APIView):
 
     def get(self, request):
         reports = Report.objects.all().filter(is_verified=True)
-        serializer = ReportSerializer(reports, many=True, context={'user': request.user})
+        serializer = ReportSerializer(reports, many=True, context={'user': request.user, 'request': request})
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ReportSerializer(data=request.data, context={'user': request.user})
+        serializer = ReportSerializer(data=request.data, context={'user': request.user, 'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save(reporter=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -30,7 +30,7 @@ class ReportDetail(APIView):
     def get(self, request, pk):
         try:
             report = Report.objects.get(pk=pk)
-            serializer = ReportSerializer(report, context={'user': request.user})
+            serializer = ReportSerializer(report, context={'user': request.user, 'request': request})
             return Response(serializer.data)
         except Report.DoesNotExist:
             raise Http404
@@ -38,7 +38,7 @@ class ReportDetail(APIView):
     def put(self, request, pk):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
-            serializer = ReportSerializer(report, data=request.data, context={'user': request.user})
+            serializer = ReportSerializer(report, data=request.data, context={'user': request.user, 'request': request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
@@ -65,7 +65,7 @@ class ReportImage(APIView):
             Image.objects.filter(report=report).delete()
             for image in images.getlist('images'):
                 Image.objects.create(report=report, src=image)
-            serializer = ReportSerializer(report, context={'user': request.user})
+            serializer = ReportSerializer(report, context={'user': request.user, 'request': request})
             return Response(serializer.data)
         except Report.DoesNotExist:
             raise Http404
