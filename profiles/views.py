@@ -1,7 +1,6 @@
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework import permissions
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
@@ -18,14 +17,13 @@ class CustomAuthToken(ObtainAuthToken):
             user = UserModel.objects.get(
                 device_id=request.data['device_id'],
             )
-            return Response({'error': 'User already exists!'}, status=status.HTTP_400_BAD_REQUEST)
         except UserModel.DoesNotExist:
             user = UserModel.objects.create(
                 device_id=request.data['device_id'],
                 username=UserProfileManager.generate_random_device_id()
             )
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
 
 
 class UserProfileApiView(APIView):
