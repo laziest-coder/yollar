@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
+from django.http import Http404
 from reports.models import Report, Image
 from reports.serializers import ReportSerializer
-from django.http import Http404
 
 
 class ReportList(APIView):
@@ -12,7 +12,7 @@ class ReportList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        reports = Report.objects.all()
+        reports = Report.objects.all().filter(is_verified=True)
         serializer = ReportSerializer(reports, many=True, context={'user': request.user})
         return Response(serializer.data)
 
