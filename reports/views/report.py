@@ -62,6 +62,8 @@ class ReportImage(APIView):
         try:
             report = Report.objects.get(pk=pk, reporter_id=request.user)
             images = request.FILES
+            if len(images) > 4:
+                return Response({'error': 'Max number of images to uplaod is 4.'}, status=status.HTTP_400_BAD_REQUEST)
             Image.objects.filter(report=report).delete()
             for image in images.getlist('images'):
                 Image.objects.create(report=report, src=image)
