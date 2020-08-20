@@ -7,4 +7,4 @@ admin.site.register(Image)
 
 @admin.register(Report)
 class ReportAdmin(OSMGeoAdmin):
-    list_display = ('address_uz', 'location')
+    list_display = ('location',)
