@@ -5,5 +5,6 @@ urlpatterns = [
     path('', report.ReportList.as_view()),
     path('<int:pk>/', report.ReportDetail.as_view()),
     path('<int:pk>/attach-images', report.ReportImage.as_view()),
-    path('<int:pk>/vote', votes.ReportVote.as_view())
+    path('<int:pk>/upvote', votes.ReportUpVote.as_view()),
+    path('<int:pk>/unvote', votes.ReportUnVote.as_view()),
 ]
