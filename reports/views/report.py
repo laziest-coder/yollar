@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 from django.http import Http404
+from django.db.models import Q
 from reports.models import Report, Image
 from reports.serializers import ReportSerializer
 
@@ -13,6 +14,13 @@ class ReportList(APIView):
 
     def get(self, request):
         reports = Report.objects.all().filter(is_verified=True)
+        if request.GET.get("query"):
+            query = request.GET['query']
+            reports = reports.filter(
+                Q(region_uz__contains=query) | Q(region_ru__contains=query) |
+                Q(district_uz__contains=query) | Q(district_ru__contains=query) |
+                Q(street_uz__contains=query) | Q(street_ru__contains=query)
+            )
         serializer = ReportSerializer(reports, many=True, context={'user': request.user, 'request': request})
         return Response(serializer.data)
 
