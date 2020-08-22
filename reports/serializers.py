@@ -22,8 +22,12 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
         fields = (
             'id',
-            'address_uz',
-            'address_ru',
+            'region_uz',
+            'region_ru',
+            'district_uz',
+            'district_ru',
+            'street_uz',
+            'street_ru',
             'location',
             'type',
             'comment',
