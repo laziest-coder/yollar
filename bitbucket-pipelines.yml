@@ -1,0 +1,26 @@
+image: ubuntu:18.04
+
+pipelines:
+  default:
+    - step:
+        name: Deploy
+        caches:
+          - pip
+        services:
+          - postgres
+        script:
+          - apt-get update
+          - apt-get -y install python3-dev python3-pip
+          - apt-get -y install libproj-dev libgdal-dev gdal-bin
+          - apt-get -y install postgresql-client
+          - source $ROOT_FOLDER/venv/bin/activate
+
+          - pip3 install -r requirements.txt
+
+          - psql -h 0.0.0.0 -p 5432 -c "create extension if not exists postgis;" -U postgres postgres;
+
+
+definitions:
+  services:
+    postgres:
+      image: mdillon/postgis:9.6
