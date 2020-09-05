@@ -1,25 +1,17 @@
-image: ubuntu:18.04
-
 pipelines:
   default:
     - step:
         name: Deploy
-        caches:
-          - pip
-        services:
-          - postgres
+        deployment: production
         script:
-          - apt-get update
-          - apt-get -y install python3-dev python3-pip
-          - apt-get -y install libproj-dev libgdal-dev gdal-bin
-          - apt-get -y install postgresql-client
-
-          - pip3 install -r requirements.txt
-
-          - psql -h 0.0.0.0 -p 5432 -c "create extension if not exists postgis;" -U postgres postgres;
-
-
-definitions:
-  services:
-    postgres:
-      image: mdillon/postgis:9.6
+         - pipe: atlassian/ssh-run:0.2.5
+           variables:
+             SSH_USER: $SSH_USER
+             SERVER: $SSH_SERVER
+             COMMAND: >
+               cd $DEPLOY_DIR && 
+               git fetch --prune --all && 
+               git checkout --force origin/$BITBUCKET_BRANCH && 
+               source venv/bin/activate &&
+               pip3 install -r requirements.txt &&
+               python3 manage.py collectstatic
