@@ -9,8 +9,9 @@ pipelines:
              SSH_USER: $SSH_USER
              SERVER: $SSH_SERVER
              COMMAND: >
-               cd $DEPLOY_DIR && 
-               git fetch --prune --all && 
+               cd $DEPLOY_DIR &&
+               pwd &&
+              #  git fetch --prune --all && 
                git checkout --force origin/$BITBUCKET_BRANCH && 
                source venv/bin/activate &&
                pip3 install -r requirements.txt &&
