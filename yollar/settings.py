@@ -1,14 +1,20 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+AUTH_USER_MODEL = "profiles.UserProfile"
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 SECRET_KEY = 'jm6e9nz8cwlk&&s=vycdxvzrc(97b9j!1-ddr#eb$s!^&f*c0y'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yollar.laziest.engineer']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,8 +33,6 @@ INSTALLED_APPS = [
     'django_cleanup',
     'django.contrib.gis',
 ]
-
-AUTH_USER_MODEL = "profiles.UserProfile"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,5 +82,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     ]
 }
-
-STATIC_URL = '/static/'
