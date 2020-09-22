@@ -11,6 +11,4 @@ pipelines:
              COMMAND: >
                cd $DEPLOY_DIR &&
                pwd &&
-               git checkout --force origin/$BITBUCKET_BRANCH &&
-               source venv/bin/activate &&
-               python3 manage.py collectstatic
+               git checkout --force origin/$BITBUCKET_BRANCH
